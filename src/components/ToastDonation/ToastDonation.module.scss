@@ -1,0 +1,26 @@
+.toast {
+  .copyIcon {
+    width: 16px;
+    height: 16px;
+    cursor: pointer;
+    transform: translate(2px, 2px);
+    path {
+      stroke: #27226d;
+      transition: 0.2s;
+    }
+    &:hover {
+      path {
+        stroke: #27226d5c;
+      }
+    }
+    &:active {
+      transform: scale(0.9);
+    }
+  }
+  a {
+    color: #27226d;
+    &:hover {
+      opacity: 0.5;
+    }
+  }
+}

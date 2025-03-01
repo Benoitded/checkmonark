@@ -1,0 +1,68 @@
+.statusDiv {
+  position: relative;
+  width: 22px;
+  min-width: 22px;
+  height: 22px;
+  .bigCircle {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 22px;
+    height: 22px;
+    border-radius: 22px;
+    background-color: #d9d9d9;
+    animation: bigSmallBigSmall infinite 2s ease-in-out;
+  }
+  .smallCircle {
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    position: absolute;
+    width: 9px;
+    height: 9px;
+    border-radius: 10px;
+    background-color: #a3a2a2;
+  }
+  &.announced {
+    .bigCircle {
+      background-color: #f0e382;
+    }
+    .smallCircle {
+      background-color: #f0b54f;
+    }
+  }
+  &.checker {
+    .bigCircle {
+      background-color: #f3c45e;
+    }
+    .smallCircle {
+      background-color: #d28706;
+    }
+  }
+  &.live {
+    .bigCircle {
+      background-color: #aeff90;
+    }
+    .smallCircle {
+      background-color: #4ebd24;
+    }
+  }
+  &.closed {
+    .bigCircle {
+      background-color: #ff9090;
+    }
+    .smallCircle {
+      background-color: #bd2424;
+    }
+  }
+}
+
+@keyframes bigSmallBigSmall {
+  0%,
+  100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(0.8);
+  }
+}

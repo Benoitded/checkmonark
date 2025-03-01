@@ -1,0 +1,31 @@
+.bottomLeft {
+  position: fixed;
+  z-index: 100;
+  bottom: 24px;
+  left: 24px;
+  border-radius: 5px;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  a {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: fit-content;
+    gap: 4px;
+    &:hover {
+      opacity: 1;
+    }
+  }
+  // svg {
+  //   width: 107.24px;
+  //   height: 26.99px;
+  // }
+  & > * {
+    opacity: 0.5;
+    filter: drop-shadow(0 0 7px #0b092b);
+  }
+  .separator {
+    margin-right: 4px;
+  }
+}
