@@ -21,7 +21,7 @@ const baloo = Baloo_Thambi_2({
 });
 
 export const metadata: Metadata = {
-  title: "Check Monark - Berachain ecosytem airdrop checker",
+  title: "Check Monark - Monark DAO",
   description:
     "Monark DAO is focused on harnessing the full potential of the Monad blockchain ecosystem.",
 
