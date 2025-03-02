@@ -6,25 +6,16 @@ import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import styles from "./page.module.scss";
-import Barcode from "@/assets/barcode.svg";
-import Border from "@/assets/border.svg";
-import LinkIcon from "@/assets/link.svg";
-import CrossIcon from "@/assets/cross.svg";
 import { useAppKit } from "@reown/appkit/react";
 import { useAccount, useConnect } from "wagmi";
 import { getEnsAddress } from "@wagmi/core";
 import { track } from "@vercel/analytics";
 import WindowImage from "@/assets/window.png";
+import MonarkLogo from "@/assets/icon_monark.png";
 
 import { getAddress } from "ethers";
 import { http, createConfig } from "@wagmi/core";
 import { mainnet, sepolia } from "@wagmi/core/chains";
-import ToastFollow from "@/components/ToastFollow/ToastFollow";
-import ToastRecommend from "@/components/ToastRecommend/ToastRecommend";
-import ToastDonation from "@/components/ToastDonation/ToastDonation";
-import Status from "@/components/Status/Status";
-import { rawAllocationsData } from "@/data/allocationData";
-import { AllocationId, AllocationRaw, Allocation } from "@/types/allocation";
 
 export const config = createConfig({
   chains: [mainnet, sepolia],
@@ -35,29 +26,6 @@ export const config = createConfig({
 });
 
 type StatusType = "nothing" | "announced" | "checker" | "live" | "closed";
-
-function sortAllocations(allocations: Allocation[]) {
-  // 1. Split into three groups
-  const numberAllocations = allocations.filter(
-    (allocation) => typeof allocation.eligible === "number"
-  );
-  const trueAllocations = allocations.filter(
-    (allocation) => allocation.eligible === true
-  );
-  const falseAllocations = allocations.filter(
-    (allocation) => allocation.eligible === false
-  );
-
-  // 2. Sort numeric allocations in descending order
-  const sortedNumberAllocations = numberAllocations.sort((a, b) => {
-    const aValue = typeof a.eligible === "number" ? a.eligible : 0;
-    const bValue = typeof b.eligible === "number" ? b.eligible : 0;
-    return bValue - aValue;
-  });
-
-  // 3. Combine in order: numbers (descending) -> true -> false
-  return [...sortedNumberAllocations, ...trueAllocations, ...falseAllocations];
-}
 
 export default function Home() {
   const [addressInput, setAddressInput] = useState("");
@@ -221,6 +189,7 @@ export default function Home() {
       <ToastRecommend />
       <ToastDonation /> */}
       <div className={styles.firstSection}>
+        <Image src={MonarkLogo} alt="Monark Logo" />
         <h1>Monark WL Checker</h1>
         <div className={styles.inputContainer}>
           <input
@@ -241,6 +210,13 @@ export default function Home() {
         <Image src={WindowImage} alt="BeraLand Logo" />
         <div className={styles.content}>{getEligibilityMessage()}</div>
       </div>
+      <Link
+        href="https://daos.world/"
+        target="_blank"
+        className={styles.buyButton}
+      >
+        BUY $MONARK
+      </Link>
     </div>
   );
 }

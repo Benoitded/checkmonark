@@ -115,7 +115,7 @@ export default function RootLayout({
                 },
               }}
             />
-            <BottomLeft />
+            {/* <BottomLeft /> */}
             {children}
           </ReownProvider>
         </NoSSR>
