@@ -105,7 +105,7 @@ export default function RootLayout({
       <body>
         <Analytics />
         <NoSSR>
-          <ReownProvider cookies={cookies}>
+          <ReownProvider>
             <Toaster
               position="bottom-right"
               toastOptions={{

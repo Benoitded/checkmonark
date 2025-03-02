@@ -1,21 +1,18 @@
 "use client";
 
-import { wagmiAdapter, projectId } from "@/config/configReown";
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { projectId } from "@/config/configReown";
 import { createAppKit } from "@reown/appkit/react";
+import { SolanaAdapter } from "@reown/appkit-adapter-solana/react";
+import { solana, solanaTestnet, solanaDevnet } from "@reown/appkit/networks";
 import {
-  mainnet,
-  arbitrum,
-  avalanche,
-  base,
-  optimism,
-  polygon,
-} from "@reown/appkit/networks";
-import React, { type ReactNode } from "react";
-import { cookieToInitialState, WagmiProvider, type Config } from "wagmi";
+  PhantomWalletAdapter,
+  SolflareWalletAdapter,
+} from "@solana/wallet-adapter-wallets";
+import { ReactNode } from "react";
 
-// Set up queryClient
-const queryClient = new QueryClient();
+const solanaWeb3JsAdapter = new SolanaAdapter({
+  wallets: [new PhantomWalletAdapter(), new SolflareWalletAdapter()],
+});
 
 if (!projectId) {
   throw new Error("Project ID is not defined");
@@ -33,11 +30,10 @@ const metadata = {
 
 // Create the modal
 const modal = createAppKit({
-  adapters: [wagmiAdapter],
-  projectId,
-  networks: [mainnet, arbitrum, avalanche, base, optimism, polygon],
-  defaultNetwork: mainnet,
+  adapters: [solanaWeb3JsAdapter],
+  networks: [solana, solanaTestnet, solanaDevnet],
   metadata: metadata,
+  projectId,
   features: {
     analytics: true, // Optional - defaults to your Cloud configuration
     email: false,
@@ -45,26 +41,8 @@ const modal = createAppKit({
   },
 });
 
-function ReownProvider({
-  children,
-  cookies,
-}: {
-  children: ReactNode;
-  cookies: string | null;
-}) {
-  const initialState = cookieToInitialState(
-    wagmiAdapter.wagmiConfig as Config,
-    cookies
-  );
-
-  return (
-    <WagmiProvider
-      config={wagmiAdapter.wagmiConfig as Config}
-      initialState={initialState}
-    >
-      <QueryClientProvider client={queryClient}>{children}</QueryClientProvider>
-    </WagmiProvider>
-  );
+function ReownProvider({ children }: { children: ReactNode }) {
+  return <>{children}</>;
 }
 
 export default ReownProvider;

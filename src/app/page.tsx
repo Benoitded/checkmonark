@@ -7,23 +7,11 @@ import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import styles from "./page.module.scss";
 import { useAppKit } from "@reown/appkit/react";
-import { useAccount, useConnect } from "wagmi";
-import { getEnsAddress } from "@wagmi/core";
+import { useAppKitAccount, useAppKitProvider } from "@reown/appkit/react";
+
 import { track } from "@vercel/analytics";
 import WindowImage from "@/assets/window.png";
 import MonarkLogo from "@/assets/icon_monark.png";
-
-import { getAddress } from "ethers";
-import { http, createConfig } from "@wagmi/core";
-import { mainnet, sepolia } from "@wagmi/core/chains";
-
-export const config = createConfig({
-  chains: [mainnet, sepolia],
-  transports: {
-    [mainnet.id]: http(),
-    [sepolia.id]: http(),
-  },
-});
 
 type StatusType = "nothing" | "announced" | "checker" | "live" | "closed";
 
@@ -37,7 +25,7 @@ export default function Home() {
   const [error, setError] = useState("");
   const [count, setCount] = useState<number | undefined>();
   const { open, close } = useAppKit();
-  const { address, isConnected } = useAccount();
+  const { address, isConnected } = useAppKitAccount();
   const router = useRouter();
   const searchParams = useSearchParams();
   const addressParam = searchParams.get("address");
@@ -78,25 +66,22 @@ export default function Home() {
     }
   }, [addressParam]);
 
-  const isValidEthereumAddress = (address: string) => {
-    return /^0x[a-fA-F0-9]{40}$/.test(address) || address.endsWith(".eth");
+  const isValidSolanaAddress = (address: string) => {
+    // Solana addresses are base58 encoded and typically 32-44 characters long
+    return /^[1-9A-HJ-NP-Za-km-z]{32,44}$/.test(address);
   };
 
   const fetchTierData = async (address: string) => {
-    if (!isValidEthereumAddress(address)) {
+    if (!isValidSolanaAddress(address)) {
       setError(
-        "Please enter a valid Ethereum address to check your eligibility."
+        "Please enter a valid Solana address to check your eligibility."
       );
       return;
     }
     router.push(`?address=${address}`, { scroll: false });
 
-    let formattedAddress;
-    try {
-      formattedAddress = getAddress(address.toLowerCase());
-    } catch (error) {
-      formattedAddress = address;
-    }
+    // No need for formatting like Ethereum addresses
+    const formattedAddress = address;
 
     setIsLoading(true);
     setError("");
@@ -119,21 +104,11 @@ export default function Home() {
   const handleInputChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const trimmedValue = e.target.value.trim();
     setAddressInput(trimmedValue);
-    if (isValidEthereumAddress(trimmedValue)) {
-      if (e.target.value.endsWith(".eth")) {
-        const addressWeGot = await getEnsAddress(config, {
-          chainId: 1,
-          name: trimmedValue.toLowerCase(),
-        });
-        if (addressWeGot) {
-          fetchTierData(addressWeGot);
-        }
-      } else {
-        fetchTierData(trimmedValue);
-      }
+    if (isValidSolanaAddress(trimmedValue)) {
+      fetchTierData(trimmedValue);
     } else {
       setError(
-        "Please enter a valid Ethereum address to check your eligibility."
+        "Please enter a valid Solana address to check your eligibility."
       );
     }
   };
@@ -180,21 +155,28 @@ export default function Home() {
       return "You are not eligible for any tier.";
     }
 
-    return `You're eligible for tier ${tierData.tier}.`;
+    // Map tier to SOL amount
+    const tierToSol = {
+      1: 10,
+      2: 3,
+      3: 1,
+      4: 0.5,
+    };
+
+    return `You're eligible for tier ${tierData.tier} (${
+      tierToSol[tierData.tier as keyof typeof tierToSol]
+    } SOL).`;
   };
 
   return (
     <div className={styles.App}>
-      {/* <ToastFollow />
-      <ToastRecommend />
-      <ToastDonation /> */}
       <div className={styles.firstSection}>
         <Image src={MonarkLogo} alt="Monark Logo" />
         <h1>Monark WL Checker</h1>
         <div className={styles.inputContainer}>
           <input
             type="text"
-            placeholder="Enter your EVM address or ENS name"
+            placeholder="Enter your Solana address"
             value={addressInput}
             onChange={handleInputChange}
           />
