@@ -65,7 +65,7 @@ export const metadata: Metadata = {
   },
 
   openGraph: {
-    images: ["/og-image.png"],
+    images: ["/ogimage.png"],
     type: "website",
     siteName: "Check Monark",
     title: "Check Monark",
@@ -78,7 +78,7 @@ export const metadata: Metadata = {
     title: "Check Monark",
     description:
       "Monark DAO is focused on harnessing the full potential of the Monad blockchain ecosystem.",
-    images: ["/og-image.png"],
+    images: ["/ogimage.png"],
   },
 };
 
