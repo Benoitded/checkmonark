@@ -187,18 +187,18 @@ export default function Home() {
               : "Connect wallet"}
           </button>
         </div>
+        <Link
+          href="https://daos.world/upcoming/base/monark"
+          target="_blank"
+          className={styles.buyButton}
+        >
+          BUY $MONARK
+        </Link>
       </div>
       <div className={styles.allocationCard}>
         <Image src={WindowImage} alt="BeraLand Logo" />
         <div className={styles.content}>{getEligibilityMessage()}</div>
       </div>
-      <Link
-        href="https://daos.world/"
-        target="_blank"
-        className={styles.buyButton}
-      >
-        BUY $MONARK
-      </Link>
     </div>
   );
 }
